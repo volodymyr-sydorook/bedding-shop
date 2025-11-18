@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+
+{% block title %}{{ product.name }}{% endblock %}
+
+{% block content %}
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{% url 'store:product_list' %}">Каталог</a></li>
+        <li class="breadcrumb-item active" aria-current="page">{{ product.name }}</li>
+    </ol>
+</nav>
+
+<div class="row gx-5">
+    <div class="col-md-6 mb-4 mb-md-0">
+        <div class="main-image-container mb-3 border rounded shadow-sm">
+            {% if product.main_image %}
+            <img src="{{ product.main_image.url }}" class="img-fluid rounded" alt="{{ product.name }}"
+                 style="max-height: 500px; object-fit: contain; width: 100%;">
+            {% else %}
+            <img src="https://via.placeholder.com/500x500?text=No+Image" class="img-fluid rounded" alt="No Image"
+                 style="max-height: 500px; object-fit: contain; width: 100%;">
+            {% endif %}
+        </div>
+
+        {% if product.images.all %}
+        <div class="row row-cols-3 row-cols-md-4 g-2">
+            {% for img in product.images.all %}
+            <div class="col">
+                <img src="{{ img.image.url }}" class="img-thumbnail" alt="Product thumbnail"
+                     style="height: 100px; object-fit: cover; width: 100%; cursor: pointer;"
+                     onclick="document.querySelector('.main-image-container img').src = this.src;">
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+    </div>
+
+    <div class="col-md-6">
+        <h1 class="mb-3">{{ product.name }}</h1>
+        <p class="text-muted lead">{{ product.category.name }}</p>
+        <h2 class="text-danger mb-4">{{ product.price }} грн</h2>
+
+        <p class="mb-4">{{ product.description|linebreaks }}</p>
+        <p class="fw-bold">Наявність: <span class="text-success">{{ product.stock }} шт.</span></p>
+
+        {% if product.stock > 0 %}
+        <form action="{% url 'cart:cart_add' product.id %}" method="post" class="d-flex align-items-center mb-4">
+            {% csrf_token %}
+            <div class="input-group w-auto me-3">
+                <button type="button" class="btn btn-outline-secondary" onclick="this.nextElementSibling.stepDown()">-
+                </button>
+                <input name="quantity" type="number" value="1" min="1" max="{{ product.stock }}"
+                       class="form-control text-center" style="width: 60px;">
+                <button type="button" class="btn btn-outline-secondary" onclick="this.previousElementSibling.stepUp()">
+                    +
+                </button>
+            </div>
+            <button type="submit" class="btn btn-primary btn-lg flex-grow-1">
+                <i class="bi bi-cart-plus me-2"></i>Додати в кошик
+            </button>
+        </form>
+        {% else %}
+        <div class="alert alert-warning" role="alert">
+            Наразі товару немає в наявності.
+        </div>
+        {% endif %}
+
+        {% if product.variants.all %}
+        <h5 class="mt-4">Доступні варіації:</h5>
+        <ul class="list-group list-group-flush">
+            {% for variant in product.variants.all %}
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+                {{ variant.name }}
+                <span class="badge bg-secondary rounded-pill">Наявність: {{ variant.stock }}</span>
+            </li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

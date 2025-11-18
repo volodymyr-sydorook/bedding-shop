@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+
+{% block title %}Доставка та Оплата{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <h1 class="text-center mb-5">Доставка та Оплата</h1>
+
+    <div class="row g-4">
+        <div class="col-md-6">
+            <div class="card h-100 border-0 shadow-sm">
+                <div class="card-body p-4">
+                    <div class="d-flex align-items-center mb-3">
+                        <i class="bi bi-truck text-primary" style="font-size: 2rem;"></i>
+                        <h3 class="ms-3 mb-0">Доставка</h3>
+                    </div>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item border-0 ps-0">
+                            <strong><span class="text-danger">Нова Пошта</span></strong><br>
+                            <span class="text-muted">У відділення або поштомат. Термін: 1-3 дні. За тарифами перевізника.</span>
+                        </li>
+                        <li class="list-group-item border-0 ps-0">
+                            <strong>Укрпошта</strong><br>
+                            <span class="text-muted">Економна доставка по всій Україні. Термін: 3-7 днів.</span>
+                        </li>
+                        <li class="list-group-item border-0 ps-0">
+                            <strong>Кур'єр по місту</strong><br>
+                            <span class="text-muted">Безкоштовно при замовленні від 2000 грн.</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="card h-100 border-0 shadow-sm">
+                <div class="card-body p-4">
+                    <div class="d-flex align-items-center mb-3">
+                        <i class="bi bi-credit-card text-success" style="font-size: 2rem;"></i>
+                        <h3 class="ms-3 mb-0">Оплата</h3>
+                    </div>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item border-0 ps-0">
+                            <strong>Оплата карткою онлайн</strong><br>
+                            <span class="text-muted">Visa / MasterCard / Google Pay / Apple Pay. Без комісії.</span>
+                        </li>
+                        <li class="list-group-item border-0 ps-0">
+                            <strong>Післяплата (Накладений платіж)</strong><br>
+                            <span class="text-muted">Оплата при отриманні у відділенні Нової Пошти. (Комісія 20 грн + 2%).</span>
+                        </li>
+                        <li class="list-group-item border-0 ps-0">
+                            <strong>Безготівковий розрахунок</strong><br>
+                            <span class="text-muted">Для юридичних осіб та ФОП.</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="text-center mt-5">
+        <p class="lead">Залишилися питання?</p>
+        <a href="{% url 'store:contacts' %}" class="btn btn-outline-dark">Зв'язатися з нами</a>
+    </div>
+</div>
+{% endblock %}

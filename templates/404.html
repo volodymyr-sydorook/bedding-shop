@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block title %}Сторінку не знайдено (404){% endblock %}
+
+{% block content %}
+<div class="d-flex align-items-center justify-content-center" style="min-height: 60vh;">
+    <div class="text-center">
+        <h1 class="display-1 fw-bold text-dark">404</h1>
+
+        <p class="fs-1 text-muted">
+            <i class="bi bi-cloud-slash"></i>
+        </p>
+
+        <h2 class="fs-3 fw-bold mb-3">Упс! Сторінку не знайдено.</h2>
+
+        <p class="lead mb-4 text-muted" style="max-width: 500px; margin: 0 auto;">
+            Схоже, сторінка, яку ви шукаєте, "не існує" або була змінена.
+            Але у нас є багато чудової постілі!
+        </p>
+
+        <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
+            <a href="{% url 'store:product_list' %}" class="btn btn-primary btn-lg px-4 gap-3">
+                <i class="bi bi-house-door me-2"></i>На головну
+            </a>
+            <a href="{% url 'store:contacts' %}" class="btn btn-outline-secondary btn-lg px-4">
+                <i class="bi bi-envelope me-2"></i>Написати нам
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}
