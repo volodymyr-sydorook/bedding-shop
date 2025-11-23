@@ -3,43 +3,61 @@
 {% block title %}Реєстрація{% endblock %}
 
 {% block content %}
-<div class="container d-flex justify-content-center align-items-center" style="min-height: 80vh;">
-    <div class="card shadow-lg p-4" style="max-width: 450px; width: 100%; border-radius: 20px;">
-        <h2 class="text-center mb-4">Реєстрація</h2>
+<div class="container d-flex flex-column justify-content-center" style="min-height: 80vh;">
+    <div class="row justify-content-center">
+        <div class="col-12 col-md-8 col-lg-6 col-xl-5">
+            <div class="card shadow border-0 rounded-4 my-4">
+                <div class="card-body p-4 p-sm-5">
+                    <div class="text-center mb-4">
+                        <h2 class="fw-bold">Реєстрація</h2>
+                        <p class="text-muted">Створіть акаунт, щоб купувати швидше</p>
+                    </div>
 
-        <form method="post" novalidate>
-            {% csrf_token %}
+                    <form method="post" novalidate>
+                        {% csrf_token %}
 
-            {% for field in form %}
-                <div class="mb-3">
-                    <label class="form-label">{{ field.label }}</label>
-                    {{ field }}
-                    {% if field.errors %}
-                        <div class="text-danger small">
-                            {{ field.errors }}
+                        {% if form.errors %}
+                        <div class="alert alert-danger small py-2">
+                            Будь ласка, перевірте правильність введених даних.
                         </div>
-                    {% endif %}
+                        {% endif %}
+
+                        {% for field in form %}
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold small mb-1">{{ field.label }}</label>
+                            {{ field }}
+
+                            {% if field.help_text %}
+                            <div class="form-text text-muted small" style="font-size: 0.75rem;">{{ field.help_text }}
+                            </div>
+                            {% endif %}
+
+                            {% if field.errors %}
+                            <div class="text-danger small mt-1">
+                                {% for error in field.errors %}
+                                <div><i class="bi bi-exclamation-circle me-1"></i>{{ error }}</div>
+                                {% endfor %}
+                            </div>
+                            {% endif %}
+                        </div>
+                        {% endfor %}
+
+                        <div class="d-grid gap-2 mt-4">
+                            <button type="submit" class="btn btn-primary py-2 fw-bold rounded-pill">
+                                Зареєструватися
+                            </button>
+                        </div>
+                    </form>
+
+                    <hr class="my-4 opacity-25">
+
+                    <p class="text-center mb-0">
+                        Вже маєте акаунт?
+                        <a href="{% url 'users:login' %}" class="fw-bold text-decoration-none">Увійти</a>
+                    </p>
                 </div>
-            {% endfor %}
-
-            <button type="submit" class="btn btn-primary w-100 py-2">
-                Зареєструватися
-            </button>
-        </form>
-
-        <p class="text-center mt-3">
-            Вже маєте акаунт?
-            <a href="{% url 'users:login' %}">Увійти</a>
-        </p>
+            </div>
+        </div>
     </div>
 </div>
-
-<style>
-    .form-label {
-        font-weight: 600;
-    }
-    input {
-        border-radius: 10px !important;
-    }
-</style>
 {% endblock %}

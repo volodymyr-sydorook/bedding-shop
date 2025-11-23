@@ -1,18 +1,28 @@
 {% extends "base.html" %}
 
-{% block title %}Дякуємо!{% endblock %}
+{% block title %}Замовлення прийнято!{% endblock %}
 
 {% block content %}
 <div class="py-5 text-center">
     <i class="bi bi-check-circle-fill text-success" style="font-size: 5rem;"></i>
-    <h1 class="display-5 fw-bold mt-3">Дякуємо за замовлення!</h1>
-    <div class="col-lg-6 mx-auto">
-        <p class="lead mb-4">Ваше замовлення <strong>№{{ order.id }}</strong> успішно створено. Наш менеджер зв'яжеться
-            з вами найближчим часом для підтвердження деталей доставки.</p>
-        <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
-            <a href="{% url 'store:product_list' %}" class="btn btn-primary btn-lg px-4 gap-3">Повернутися до
-                магазину</a>
-            <a href="{% url 'users:profile' %}" class="btn btn-outline-secondary btn-lg px-4">Переглянути замовлення</a>
+    <h1 class="display-5 fw-bold mt-3">Ваше замовлення прийнято!</h1>
+    <div class="col-lg-8 mx-auto">
+        <p class="lead mb-4 text-muted">
+            Замовлення №<strong>{{ order.id }}</strong> успішно оформлено.
+        </p>
+
+        <div class="alert alert-info py-3 shadow-sm" role="alert">
+            <h5 class="alert-heading fw-bold">Що далі?</h5>
+            <p>
+                Ваша заявка надіслана в обробку. Менеджер магазину **BeddingShop** зв'яжеться з вами за вказаним номером
+                телефону ({{ order.phone_number }})
+                протягом 30 хвилин для підтвердження наявності товару та узгодження деталей відправки.
+            </p>
+        </div>
+
+        <div class="d-grid gap-2 d-sm-flex justify-content-sm-center mt-5">
+            <a href="{% url 'store:product_list' %}" class="btn btn-primary btn-lg px-4 gap-3">Продовжити покупки</a>
+            <a href="{% url 'users:profile' %}" class="btn btn-outline-secondary btn-lg px-4">Мій кабінет</a>
         </div>
     </div>
 </div>

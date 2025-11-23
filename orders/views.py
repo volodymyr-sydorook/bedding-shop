@@ -1,34 +1,50 @@
 # orders/views.py
-from django.shortcuts import render, redirect
-from django.urls import reverse
+from decimal import Decimal
+
+from django.shortcuts import render, redirect, get_object_or_404
 from .models import OrderItem
 from .forms import OrderCreateForm
 from cart.cart import Cart  # Нам потрібен наш кошик!
+from django.contrib import messages
+from .models import Order  # <-- Переконайтеся, що Order імпортовано
+from .utils import send_telegram_notification
 
 
 def order_create(request):
     """
-    View для створення замовлення.
+    Обробляє оформлення замовлення, зберігає дані і безумовно перенаправляє на сторінку "Дякуємо"
+    (замовлення приймається в обробку менеджером).
     """
-    cart = Cart(request)  # Отримуємо кошик з сесії
+    cart = Cart(request)
+
+    if not cart:
+        messages.error(request, "Ваш кошик порожній.")
+        return redirect('store:product_list')
 
     if request.method == 'POST':
-        # --- 1. Якщо форма відправлена (POST) ---
         form = OrderCreateForm(request.POST)
 
-        # Перевіряємо, чи дані коректні
         if form.is_valid():
-            order = form.save(commit=False)  # Створюємо об'єкт 'Order', але не зберігаємо в базу
+            order = form.save(commit=False)
 
-            # --- Ваша логіка з зареєстрованим юзером ---
+            # 1. Зареєстрований користувач
             if request.user.is_authenticated:
-                # Якщо юзер залогінений, прив'язуємо замовлення до нього
                 order.user = request.user
-            # -----------------------------------------------
 
-            order.save()  # Тепер зберігаємо замовлення в базу
+            # 2. Зберігаємо замовлення
+            order.save()
 
-            # --- 2. Створюємо OrderItem для кожного товару ---
+            # 2. Виклик сповіщення
+            try:
+                # 🟢 Переконайтеся, що функція викликається
+                send_telegram_notification(order)
+            except Exception as e:
+                # Це critical, але не повинно ламати клієнтський досвід
+                print(f"Критична помилка при відправці Telegram: {e}")
+                # 🟢 Додатково виводимо повідомлення для debug
+                messages.warning(request, "Помилка при відправці повідомлення в Telegram!")
+
+            # 3. Створення Order Items (знімок кошика)
             for item in cart:
                 OrderItem.objects.create(
                     order=order,
@@ -37,25 +53,20 @@ def order_create(request):
                     quantity=item['quantity']
                 )
 
-                # (Додатково: відняти 'stock' у товару)
-                # product = item['product']
-                # product.stock -= item['quantity']
-                # product.save()
-
-            # --- 3. Очищуємо кошик ---
+            # 4. Очищення кошика
             cart.clear()
 
-            # --- 4. Перекидаємо на сторінку "Дякуємо" ---
-            # Ми передаємо ID замовлення на сторінку успіху
+            # 5. ФІНАЛ: Безумовне перенаправлення на сторінку "Дякуємо!"
+            # (Це означає, що замовлення прийнято в обробку менеджером)
             return render(request,
                           'orders/order_created.html',
                           {'order': order})
 
     else:
-        # --- 5. Якщо це GET-запит (просто завантажили сторінку) ---
+        # GET: Початкове завантаження сторінки
         form = OrderCreateForm()
 
-        # --- Ваша логіка: заповнити поля, якщо юзер залогінений ---
+        # Заповнення форми даними зареєстрованого користувача
         if request.user.is_authenticated:
             form.initial = {
                 'first_name': request.user.first_name,
@@ -63,9 +74,8 @@ def order_create(request):
                 'email': request.user.email,
                 'phone_number': request.user.phone_number
             }
-        # --------------------------------------------------------
 
-    # Рендеримо сторінку з формою
+    # Рендеринг сторінки
     return render(request,
                   'orders/checkout.html',
                   {'cart': cart, 'form': form})

@@ -24,8 +24,8 @@ SECRET_KEY = 'django-insecure-a(if&9uic12gr_r@ksdij+hqf=%)**e^^xu@5u4)aq@!&xwi0d
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost']  # <-- Обов'язково додати це!
-# Application definition
+# core/settings.py
+ALLOWED_HOSTS = ['*'] # Додайте внутрішні IP вашого ПК# Application definition
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -149,3 +149,10 @@ LOGIN_REDIRECT_URL = '/'  # На головну
 
 # URL сторінки входу (якщо неавторизований юзер лізе в профіль)
 LOGIN_URL = '/users/login/'
+
+# core/settings.py
+
+# --- НАЛАШТУВАННЯ ТЕЛЕГРАМ ---
+TELEGRAM_BOT_TOKEN = '7315962466:AAGcWPc7ZuXOufYyTUAyjXROyNuhDI2wIEc'
+TELEGRAM_MANAGER_CHAT_ID = '-5074644405' # Не забудьте про мінус, якщо це група/канал
+# -----------------------------

@@ -1,17 +1,25 @@
-# orders/forms.py (новий файл)
+# orders/forms.py
 from django import forms
 from .models import Order
 
 
 class OrderCreateForm(forms.ModelForm):
-    """
-    Форма, що базується на моделі Order.
-    Django автоматично створить поля, які ми вказали.
-    """
-
     class Meta:
         model = Order
-        # Вказуємо, які поля з моделі Order показувати у формі
-        fields = ['first_name', 'last_name', 'email', 'phone_number']
+        fields = [
+            'first_name', 'last_name', 'email', 'phone_number',
+            'delivery_method', 'city', 'warehouse',
+            'payment_method', 'comment'
+        ]
+        widgets = {
+            'delivery_method': forms.RadioSelect(attrs={'class': 'form-check-input'}),
+            'payment_method': forms.RadioSelect(attrs={'class': 'form-check-input'}),
+            'comment': forms.Textarea(attrs={'rows': 3, 'placeholder': 'Наприклад: код домофону 35'}),
+        }
 
-        # (Ми не включаємо 'user', бо ми його встановимо автоматично у view)
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # Додаємо клас form-control до всіх текстових полів
+        for field_name, field in self.fields.items():
+            if field_name not in ['delivery_method', 'payment_method']:
+                field.widget.attrs['class'] = 'form-control'

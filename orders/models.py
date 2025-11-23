@@ -1,3 +1,5 @@
+from decimal import Decimal
+
 from django.db import models
 from django.conf import settings
 from store.models import Product  # Нам потрібна модель Product
@@ -12,46 +14,51 @@ class Order(models.Model):
         ('canceled', 'Скасовано'),
     ]
 
-    # --- 1. Зв'язок з Користувачем ---
-    # Якщо користувач зареєстрований, прив'язуємо замовлення до нього.
-    # on_delete=models.SET_NULL: якщо видалити юзера, замовлення лишиться.
-    user = models.ForeignKey(settings.AUTH_USER_MODEL,
-                             on_delete=models.SET_NULL,
-                             null=True, blank=True,  # Дозволяємо порожнє поле (для гостей)
-                             related_name='orders',
-                             verbose_name="Користувач")
+    DELIVERY_CHOICES = [
+        ('nova_poshta', 'Нова Пошта'),
+        ('ukr_poshta', 'Укрпошта'),
+    ]
 
-    # --- 2. Дані для гостьового замовлення ---
-    # Як ви й просили: якщо гість, він вказує ці дані.
-    # Якщо зареєстрований, ми їх заповнимо автоматично.
+    PAYMENT_CHOICES = [
+        ('cod', 'Накладений платіж (Оплата при отриманні)'),
+        ('card', 'Оплата карткою'),  # Це тепер лише індикація для менеджера
+    ]
+    # ---
+
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL,
+                             null=True, blank=True, related_name='orders', verbose_name="Користувач")
+
+    # Основні дані
     first_name = models.CharField(max_length=100, verbose_name="Ім'я")
     last_name = models.CharField(max_length=100, verbose_name="Прізвище")
     email = models.EmailField(verbose_name="Email")
     phone_number = models.CharField(max_length=20, verbose_name="Номер телефону")
 
-    # --- 3. Інформація про замовлення ---
+    # Дані доставки
+    delivery_method = models.CharField(max_length=20, choices=DELIVERY_CHOICES, default='nova_poshta',
+                                       verbose_name="Спосіб доставки")
+    city = models.CharField(max_length=100, verbose_name="Місто / Населений пункт", default="")
+    warehouse = models.CharField(max_length=100, verbose_name="Відділення / Поштомат", default="")
+    payment_method = models.CharField(max_length=20, choices=PAYMENT_CHOICES, default='cod',
+                                      verbose_name="Спосіб оплати")  # Зберігаємо для менеджера
+    comment = models.TextField(blank=True, null=True, verbose_name="Коментар до замовлення")
+
     created = models.DateTimeField(auto_now_add=True, verbose_name="Створено")
     updated = models.DateTimeField(auto_now=True, verbose_name="Оновлено")
-    status = models.CharField(max_length=20,
-                              choices=STATUS_CHOICES,
-                              default='new',
-                              verbose_name="Статус")
-
-    # (Ми будемо розраховувати загальну суму пізніше,
-    # але можна зберігати її тут)
-    # total_price = models.DecimalField(...)
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='new', verbose_name="Статус")
 
     class Meta:
         verbose_name = "Замовлення"
         verbose_name_plural = "Замовлення"
-        ordering = ('-created',)  # Найновіші замовлення зверху
+        ordering = ('-created',)
 
     def __str__(self):
-        return f"Замовлення №{self.id} ({self.status})"
+        return f"Замовлення №{self.id}"
 
     def get_total_cost(self):
-        """Рахує загальну вартість всіх товарів у цьому замовленні."""
-        return sum(item.get_cost() for item in self.items.all())
+        # 🟢 ВИПРАВЛЕНО: Додаємо Decimal(0) як початкове значення для sum().
+        # Це гарантує, що тип результату завжди буде Decimal.
+        return sum((item.get_cost() for item in self.items.all()), Decimal(0))
 
 
 class OrderItem(models.Model):
@@ -81,4 +88,5 @@ class OrderItem(models.Model):
 
     def get_cost(self):
         """Рахує вартість позиції (ціна * кількість)"""
+        # 🟢 ВИПРАВЛЕНО: Явно приводимо результат до Decimal, хоча Django має це робити сам.
         return self.price * self.quantity
