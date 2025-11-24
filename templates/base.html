@@ -25,7 +25,7 @@
 
         .card-product:hover {
             transform: translateY(-5px);
-            shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); /* Виправлено shadow на box-shadow */
         }
 
         footer {
@@ -45,8 +45,9 @@
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
             <span class="navbar-toggler-icon"></span>
         </button>
-        <form class="d-flex mx-auto" action="{% url 'store:product_list' %}" method="get"
-              style="max-width: 400px; width: 100%;">
+
+        <form class="d-flex mx-auto my-3 my-lg-0 w-100" action="{% url 'store:product_list' %}" method="get"
+              style="max-width: 400px;">
             <input class="form-control me-2" type="search" name="q" placeholder="Пошук товарів..."
                    value="{{ search_query|default:'' }}" aria-label="Search">
             <button class="btn btn-outline-light" type="submit"><i class="bi bi-search"></i></button>
@@ -60,9 +61,9 @@
             </ul>
 
             <ul class="navbar-nav ms-auto align-items-center">
-                <li class="nav-item me-3">
-                    <a href="{% url 'cart:cart_detail' %}" class="btn btn-outline-light position-relative">
-                        <i class="bi bi-cart-fill"></i> Кошик
+                <li class="nav-item me-3 mb-2 mb-lg-0">
+                    <a href="{% url 'cart:cart_detail' %}" class="btn btn-outline-light position-relative w-100">
+                        <i class="bi bi-cart-fill"></i> <span class="d-lg-none">Кошик</span>
                         {% if cart|length > 0 %}
                         <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
                                     {{ cart|length }}
@@ -70,16 +71,16 @@
                         {% endif %}
                     </a>
                     {% if cart|length > 0 %}
-                    <span class="text-white ms-2 small">{{ cart.get_total_price }} грн</span>
+                    <span class="text-white ms-2 small d-none d-lg-inline">{{ cart.get_total_price }} грн</span>
                     {% endif %}
                 </li>
 
                 {% if user.is_authenticated %}
-                <li class="nav-item dropdown">
+                <li class="nav-item dropdown w-100">
                     <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
                         <i class="bi bi-person-circle"></i> {{ user.username }}
                     </a>
-                    <ul class="dropdown-menu dropdown-menu-end">
+                    <ul class="dropdown-menu dropdown-menu-end w-100">
                         <li><a class="dropdown-item" href="{% url 'users:profile' %}">Мій кабінет</a></li>
                         <li>
                             <hr class="dropdown-divider">
@@ -97,7 +98,8 @@
                     <a class="nav-link" href="{% url 'users:login' %}">Вхід</a>
                 </li>
                 <li class="nav-item">
-                    <a class="btn btn-primary btn-sm ms-2" href="{% url 'users:register' %}">Реєстрація</a>
+                    <a class="btn btn-primary btn-sm ms-2 w-100 w-lg-auto mt-2 mt-lg-0"
+                       href="{% url 'users:register' %}">Реєстрація</a>
                 </li>
                 {% endif %}
             </ul>
@@ -108,8 +110,9 @@
 <main class="container my-4" style="min-height: 80vh;">
     {% if messages %}
     {% for message in messages %}
-    <div class="alert alert-{{ message.tags }}">
+    <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
         {{ message }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
     {% endfor %}
     {% endif %}
@@ -120,16 +123,16 @@
 
 <footer class="bg-dark text-light pt-5 pb-3 mt-auto">
     <div class="container">
-        <div class="row">
-            <div class="col-md-4 mb-4">
+        <div class="row text-center text-md-start g-4">
+            <div class="col-md-4">
                 <h5 class="text-uppercase fw-bold mb-3">BeddingShop</h5>
-                <p class="small text-muted">
+                <p class="small text-white-50">
                     Ваш надійний партнер у світі комфортного сну. Ми пропонуємо лише якісну постільну білизну з
                     натуральних матеріалів.
                 </p>
             </div>
 
-            <div class="col-md-4 mb-4">
+            <div class="col-md-4">
                 <h5 class="text-uppercase fw-bold mb-3">Клієнтам</h5>
                 <ul class="list-unstyled">
                     <li class="mb-2">
@@ -147,11 +150,11 @@
                 </ul>
             </div>
 
-            <div class="col-md-4 mb-4">
+            <div class="col-md-4">
                 <h5 class="text-uppercase fw-bold mb-3">Зв'язок</h5>
-                <p class="small mb-1"><i class="bi bi-telephone-fill me-2"></i> +38 (099) 123-45-67</p>
-                <p class="small mb-1"><i class="bi bi-envelope-fill me-2"></i> info@beddingshop.com</p>
-                <p class="small"><i class="bi bi-geo-alt-fill me-2"></i> м. Київ, вул. Хрещатик, 1</p>
+                <p class="small mb-1"><i class="bi bi-telephone-fill me-2"></i> +38 (097) 632-15-54</p>
+                <p class="small mb-1"><i class="bi bi-envelope-fill me-2"></i> sidorookvolodia@gmail.com</p>
+                <p class="small"><i class="bi bi-geo-alt-fill me-2"></i> м. Ратне, вул. Перемоги, 2</p>
             </div>
         </div>
 
@@ -159,9 +162,9 @@
 
         <div class="row align-items-center">
             <div class="col-md-6 text-center text-md-start">
-                <p class="small text-muted mb-0">&copy; 2025 BeddingShop. Усі права захищено.</p>
+                <p class="small text-white-50 mb-0">&copy; 2025 BeddingShop. Усі права захищено.</p>
             </div>
-            <div class="col-md-6 text-center text-md-end">
+            <div class="col-md-6 text-center text-md-end mt-3 mt-md-0">
                 <a href="#" class="text-light me-3"><i class="bi bi-instagram"></i></a>
                 <a href="#" class="text-light me-3"><i class="bi bi-facebook"></i></a>
                 <a href="#" class="text-light"><i class="bi bi-telegram"></i></a>
