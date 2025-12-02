@@ -79,8 +79,16 @@ WSGI_APPLICATION = 'core.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'bedding_shop_db',  # Назва бази, яку ви створили
+        'USER': 'root',             # Ваш логін (зазвичай root)
+        'PASSWORD': 'soroka',             # Ваш пароль (у XAMPP часто порожній)
+        'HOST': '127.0.0.1',        # Локальний хост
+        'PORT': '3306',             # Стандартний порт
+        'OPTIONS': {
+            # Важливо для строгого режиму SQL
+            'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
+        },
     }
 }
 
