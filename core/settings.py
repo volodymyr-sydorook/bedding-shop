@@ -11,6 +11,9 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 import os
 from pathlib import Path
+from dotenv import load_dotenv
+
+load_dotenv() # load environment
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -82,7 +85,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'bedding_shop_db',  # Назва бази, яку ви створили
         'USER': 'root',             # Ваш логін (зазвичай root)
-        'PASSWORD': 'soroka',             # Ваш пароль (у XAMPP часто порожній)
+        'PASSWORD': os.getenv('DATABASE_PASSWORD'),             # Ваш пароль (у XAMPP часто порожній)
         'HOST': '127.0.0.1',        # Локальний хост
         'PORT': '3306',             # Стандартний порт
         'OPTIONS': {
@@ -121,11 +124,6 @@ USE_I18N = True
 
 USE_TZ = True
 
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/5.2/howto/static-files/
-
-STATIC_URL = 'static/'
-
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
@@ -161,6 +159,6 @@ LOGIN_URL = '/users/login/'
 # core/settings.py
 
 # --- НАЛАШТУВАННЯ ТЕЛЕГРАМ ---
-TELEGRAM_BOT_TOKEN = '7315962466:AAGcWPc7ZuXOufYyTUAyjXROyNuhDI2wIEc'
-TELEGRAM_MANAGER_CHAT_ID = '-5074644405' # Не забудьте про мінус, якщо це група/канал
+TELEGRAM_BOT_TOKEN = os.getenv('TELEGRAM_BOT_TOKEN')
+TELEGRAM_MANAGER_CHAT_ID = os.getenv('TELEGRAM_MANAGER_CHAT_ID')
 # -----------------------------

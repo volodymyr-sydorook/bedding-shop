@@ -1,0 +1,44 @@
+# --- Python ---
+__pycache__/
+*.py[cod]
+*$py.class
+
+# --- Django ---
+*.log
+local_settings.py
+db.sqlite3
+db.sqlite3-journal
+
+# --- Virtual Environment (Віртуальне оточення) ---
+# Це папка з бібліотеками, вона не потрібна на GitHub
+venv/
+.venv/
+env/
+ENV/
+
+# --- Static & Media (Статика та Медіа) ---
+# Ігноруємо зібрану статику (та, що створюється командою collectstatic)
+static_root/
+staticfiles/
+
+# Ігноруємо завантажені користувачем фото (щоб не забивати репозиторій)
+# Але залишаємо саму папку media, якщо в ній є .gitkeep (опціонально)
+media/
+static/
+data.json
+db.sqlite3
+
+# --- IDE (Налаштування редакторів коду) ---
+# Налаштування PyCharm
+.idea/
+# Налаштування VS Code
+.vscode/
+
+# --- Security (Безпека) ---
+# Файли зі змінними оточення (паролі, ключі)
+.env
+.env.local
+
+# --- OS generated files ---
+.DS_Store
+Thumbs.db
