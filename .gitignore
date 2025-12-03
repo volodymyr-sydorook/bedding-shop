@@ -25,8 +25,6 @@ staticfiles/
 # Але залишаємо саму папку media, якщо в ній є .gitkeep (опціонально)
 media/
 static/
-data.json
-db.sqlite3
 
 # --- IDE (Налаштування редакторів коду) ---
 # Налаштування PyCharm
@@ -42,3 +40,12 @@ db.sqlite3
 # --- OS generated files ---
 .DS_Store
 Thumbs.db
+
+# --- Database (Бази даних) ---
+# Ігноруємо будь-які файли баз даних
+*.sqlite3
+*.db
+
+# --- Data Dumps (Дампи даних) ---
+# Ігноруємо всі JSON файли (щоб не викласти дамп з клієнтами)
+*.json

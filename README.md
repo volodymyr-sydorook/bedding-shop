@@ -80,9 +80,6 @@ Follow these steps to run the project locally.
     python manage.py runserver
     ```
 
-## 📸 Screenshots
-*(Add screenshots of your Catalog, Cart, and Admin panel here)*
-
 ## 📄 License
 This project is open-source and available under the [MIT License](LICENSE).
 
