@@ -25,7 +25,7 @@ class OrderAdmin(admin.ModelAdmin):
         """Форматує назви товарів та кількість у зручний рядок."""
         # Обмежуємо до перших 2-3 позицій для таблиці
         items = obj.items.all()[:3]
-        summary = [f"{item.product} ({item.quantity} шт.)" for item in items]
+        summary = [f"{item.product.name} ({item.quantity} шт.)" for item in items]
         if obj.items.count() > 3:
             summary.append(f"... та ще {obj.items.count() - 3}")
         return " | ".join(summary)

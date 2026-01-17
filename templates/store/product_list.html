@@ -3,191 +3,128 @@
 {% block title %}Каталог товарів{% endblock %}
 
 {% block content %}
-<div class="d-flex justify-content-between align-items-center mb-4">
-    <h1>Наш Каталог</h1>
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1>Наш Каталог</h1>
 
-    {# Кнопка Фільтрів (Видно ТІЛЬКИ на мобільних d-lg-none) #}
-    <button class="btn btn-primary d-lg-none" type="button" data-bs-toggle="collapse" data-bs-target="#mobileFilters"
-            aria-expanded="false" aria-controls="mobileFilters">
-        <i class="bi bi-funnel-fill me-2"></i>Фільтри
-    </button>
-</div>
+        {# Кнопка Фільтрів (Видно ТІЛЬКИ на мобільних d-lg-none) #}
+        <button class="btn btn-primary d-lg-none" type="button" data-bs-toggle="collapse" data-bs-target="#mobileFilters" aria-expanded="false" aria-controls="mobileFilters">
+            <i class="bi bi-funnel-fill me-2"></i>Фільтри
+        </button>
+    </div>
 
-<div class="row">
+    <div class="row">
 
-    {# Блок Фільтрів #}
-    <aside class="col-lg-3 mb-4">
-        {# Логіка: collapse (ховає на моб), d-lg-block (примусово показує на ПК) #}
-        <div class="collapse d-lg-block" id="mobileFilters">
-            <div class="card border-0 shadow-sm p-3">
-                <div class="d-flex justify-content-between align-items-center mb-3">
-                    <h4 class="card-title mb-0">Фільтри</h4>
-                    {# Хрестик для закриття (тільки на мобільних) #}
-                    <button type="button" class="btn-close d-lg-none" data-bs-toggle="collapse"
-                            data-bs-target="#mobileFilters" aria-label="Close"></button>
+        {# Блок Фільтрів #}
+        <aside class="col-lg-3 mb-4">
+            {# Логіка: collapse (ховає на моб), d-lg-block (примусово показує на ПК) #}
+            <div class="collapse d-lg-block" id="mobileFilters">
+                <div class="card border-0 shadow-sm p-3">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h4 class="card-title mb-0">Фільтри</h4>
+                        {# Хрестик для закриття (тільки на мобільних) #}
+                        <button type="button" class="btn-close d-lg-none" data-bs-toggle="collapse" data-bs-target="#mobileFilters" aria-label="Close"></button>
+                    </div>
+
+                    <form method="get">
+                        {% if search_query %}
+                            <input type="hidden" name="q" value="{{ search_query }}">
+                        {% endif %}
+
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Ціна від (грн)</label>
+                            {{ filter.form.min_price }}
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Ціна до (грн)</label>
+                            {{ filter.form.max_price }}
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Категорія</label>
+                            {{ filter.form.category }}
+                        </div>
+
+                        <button type="submit" class="btn btn-dark w-100 mb-2">Застосувати</button>
+                        <a href="{% url 'store:product_list' %}" class="btn btn-outline-secondary w-100">Скинути</a>
+                    </form>
                 </div>
-
-                <form method="get">
-                    {% if search_query %}
-                    <input type="hidden" name="q" value="{{ search_query }}">
-                    {% endif %}
-
-                    <div class="mb-3">
-                        <label class="form-label fw-bold">Ціна від (грн)</label>
-                        {{ filter.form.min_price }}
-                    </div>
-
-                    <div class="mb-3">
-                        <label class="form-label fw-bold">Ціна до (грн)</label>
-                        {{ filter.form.max_price }}
-                    </div>
-
-                    <div class="mb-3">
-                        <label class="form-label fw-bold">Категорія</label>
-                        {{ filter.form.category }}
-                    </div>
-
-                    <button type="submit" class="btn btn-dark w-100 mb-2">Застосувати</button>
-                    <a href="{% url 'store:product_list' %}" class="btn btn-outline-secondary w-100">Скинути</a>
-                </form>
             </div>
-        </div>
-    </aside>
+        </aside>
 
-    {# Блок Товарів #}
-    <div class="col-lg-9">
-        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
-            {% for product in products %}
-            <div class="col">
-                <div class="card h-100 shadow-sm card-product border-0">
-                    <div style="position: relative;">
-                        {% if product.main_image %}
-                        <a href="{{ product.get_absolute_url }}">
-                            <img src="{{ product.main_image.url }}" class="card-img-top" alt="{{ product.name }}"
-                                 style="height: 250px; object-fit: cover;">
-                        </a>
-                        {% else %}
-                        <img src="https://via.placeholder.com/250x250?text=No+Image" class="card-img-top" alt="No Image"
-                             style="height: 250px; object-fit: cover;">
-                        {% endif %}
+        {# Блок Товарів #}
+        <div class="col-lg-9">
+            <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+                {% for product in products %}
+                    <div class="col">
+                        <div class="card h-100 shadow-sm card-product border-0">
+                            <div style="position: relative;">
+                                {% if product.main_image %}
+                                    <a href="{{ product.get_absolute_url }}">
+                                        <img src="{{ product.main_image.url }}" class="card-img-top" alt="{{ product.name }}" style="height: 250px; object-fit: cover;">
+                                    </a>
+                                {% else %}
+                                    <img src="https://via.placeholder.com/250x250?text=No+Image" class="card-img-top" alt="No Image" style="height: 250px; object-fit: cover;">
+                                {% endif %}
 
-                        {# Лейбл "Немає в наявності" #}
-                        {% if product.stock == 0 %}
-                        <span class="badge bg-secondary position-absolute top-0 end-0 m-2">Розпродано</span>
-                        {% endif %}
-                    </div>
-
-                    <div class="card-body d-flex flex-column">
-                        <h5 class="card-title">
-                            <a href="{{ product.get_absolute_url }}" class="text-dark text-decoration-none fw-bold">
-                                {{ product.name }}
-                            </a>
-                        </h5>
-                        <p class="card-text text-muted small mb-2">{{ product.category.name }}</p>
-
-                        <div class="mt-auto d-flex justify-content-between align-items-end">
-                            <div>
-                                <span class="fs-5 fw-bold text-danger">{{ product.price }} грн</span>
+                                {# Лейбл "Немає в наявності" #}
+                                {% if product.stock == 0 %}
+                                    <span class="badge bg-secondary position-absolute top-0 end-0 m-2">Розпродано</span>
+                                {% endif %}
                             </div>
-                            <a href="{{ product.get_absolute_url }}" class="btn btn-outline-dark btn-sm">Детальніше</a>
+
+                            <div class="card-body d-flex flex-column">
+                                <h5 class="card-title">
+                                    <a href="{{ product.get_absolute_url }}" class="text-dark text-decoration-none fw-bold">
+                                        {{ product.name }}
+                                    </a>
+                                </h5>
+                                <p class="card-text text-muted small mb-2">{{ product.category.name }}</p>
+
+                                <div class="mt-auto d-flex justify-content-between align-items-end">
+                                    <div>
+                                        <span class="fs-5 fw-bold text-danger">{{ product.price }} грн</span>
+                                    </div>
+                                    <a href="{{ product.get_absolute_url }}" class="btn btn-outline-dark btn-sm">Детальніше</a>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                </div>
-            </div>
-            {% empty %}
-            <div class="col-12">
-                <div class="alert alert-light text-center py-5 shadow-sm" role="alert">
-                    <i class="bi bi-search display-4 text-muted"></i>
-                    <h4 class="mt-3">Нічого не знайдено</h4>
-                    <p class="text-muted">Спробуйте змінити фільтри або пошуковий запит.</p>
-                    <a href="{% url 'store:product_list' %}" class="btn btn-primary mt-2">Скинути фільтри</a>
-                </div>
-            </div>
-            {% endfor %}
-        </div>
-
-        {% if products.has_other_pages %}
-        <nav class="mt-5" aria-label="Page navigation">
-            <ul class="pagination justify-content-center flex-wrap">
-
-                {# Кнопка "Перша" #}
-                {% if products.number > 3 %}
-                <li class="page-item">
-                    <a class="page-link text-dark"
-                       href="?page=1{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}{% if request.GET.min_price %}&min_price={{ request.GET.min_price }}{% endif %}{% if request.GET.max_price %}&max_price={{ request.GET.max_price }}{% endif %}{% if request.GET.category %}&category={{ request.GET.category }}{% endif %}">
-                        1
-                    </a>
-                </li>
-                {% if products.number > 4 %}
-                <li class="page-item disabled"><span class="page-link border-0">...</span></li>
-                {% endif %}
-                {% endif %}
-
-                {# Кнопка "Попередня" #}
-                {% if products.has_previous %}
-                <li class="page-item">
-                    <a class="page-link text-dark"
-                       href="?page={{ products.previous_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}{% if request.GET.min_price %}&min_price={{ request.GET.min_price }}{% endif %}{% if request.GET.max_price %}&max_price={{ request.GET.max_price }}{% endif %}{% if request.GET.category %}&category={{ request.GET.category }}{% endif %}"
-                       aria-label="Previous">
-                        <span aria-hidden="true">&laquo;</span>
-                    </a>
-                </li>
-                {% else %}
-                <li class="page-item disabled">
-                    <span class="page-link">&laquo;</span>
-                </li>
-                {% endif %}
-
-                {# Цикл для номерів сторінок (показуємо діапазон навколо поточної) #}
-                {% for i in products.paginator.page_range %}
-                {% if i == products.number %}
-                {# Активна сторінка #}
-                <li class="page-item active">
-                    <span class="page-link bg-dark border-dark">{{ i }}</span>
-                </li>
-                {% elif i > products.number|add:'-3' and i < products.number|add:'3' %}
-                {# Показуємо 2 сторінки зліва і 2 справа від поточної #}
-                <li class="page-item">
-                    <a class="page-link text-dark"
-                       href="?page={{ i }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}{% if request.GET.min_price %}&min_price={{ request.GET.min_price }}{% endif %}{% if request.GET.max_price %}&max_price={{ request.GET.max_price }}{% endif %}{% if request.GET.category %}&category={{ request.GET.category }}{% endif %}">
-                        {{ i }}
-                    </a>
-                </li>
-                {% endif %}
+                {% empty %}
+                    <div class="col-12">
+                        <div class="alert alert-light text-center py-5 shadow-sm" role="alert">
+                            <i class="bi bi-search display-4 text-muted"></i>
+                            <h4 class="mt-3">Нічого не знайдено</h4>
+                            <p class="text-muted">Спробуйте змінити фільтри або пошуковий запит.</p>
+                            <a href="{% url 'store:product_list' %}" class="btn btn-primary mt-2">Скинути фільтри</a>
+                        </div>
+                    </div>
                 {% endfor %}
+            </div>
 
-                {# Кнопка "Наступна" #}
-                {% if products.has_next %}
-                <li class="page-item">
-                    <a class="page-link text-dark"
-                       href="?page={{ products.next_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}{% if request.GET.min_price %}&min_price={{ request.GET.min_price }}{% endif %}{% if request.GET.max_price %}&max_price={{ request.GET.max_price }}{% endif %}{% if request.GET.category %}&category={{ request.GET.category }}{% endif %}"
-                       aria-label="Next">
-                        <span aria-hidden="true">&raquo;</span>
-                    </a>
-                </li>
-                {% else %}
-                <li class="page-item disabled">
-                    <span class="page-link">&raquo;</span>
-                </li>
-                {% endif %}
+            {# Пагінація #}
+            {% if products.has_other_pages %}
+            <nav class="mt-5">
+                <ul class="pagination justify-content-center">
+                    {% if products.has_previous %}
+                        <li class="page-item">
+                            <a class="page-link text-dark" href="?page={{ products.previous_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">&laquo; Попередня</a>
+                        </li>
+                    {% endif %}
 
-                {# Кнопка "Остання" #}
-                {% if products.number < products.paginator.num_pages|add:'-2' %}
-                {% if products.number < products.paginator.num_pages|add:'-3' %}
-                <li class="page-item disabled"><span class="page-link border-0">...</span></li>
-                {% endif %}
-                <li class="page-item">
-                    <a class="page-link text-dark"
-                       href="?page={{ products.paginator.num_pages }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}{% if request.GET.min_price %}&min_price={{ request.GET.min_price }}{% endif %}{% if request.GET.max_price %}&max_price={{ request.GET.max_price }}{% endif %}{% if request.GET.category %}&category={{ request.GET.category }}{% endif %}">
-                        {{ products.paginator.num_pages }}
-                    </a>
-                </li>
-                {% endif %}
+                    <li class="page-item disabled">
+                        <span class="page-link bg-dark text-white border-dark">Сторінка {{ products.number }}</span>
+                    </li>
 
-            </ul>
-        </nav>
-        {% endif %}
+                    {% if products.has_next %}
+                        <li class="page-item">
+                            <a class="page-link text-dark" href="?page={{ products.next_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">Наступна &raquo;</a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </nav>
+            {% endif %}
 
+        </div>
     </div>
-</div>
 {% endblock %}

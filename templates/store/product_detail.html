@@ -2,21 +2,6 @@
 
 {% block title %}{{ product.name }}{% endblock %}
 
-{% block meta_tags %}
-<meta property="og:title" content="{{ product.name }} | BeddingShop">
-
-<meta property="og:description"
-      content="🔥 Ціна: {{ product.price }} грн. {{ product.description|striptags|truncatechars:100 }}">
-
-{% if product.main_image %}
-<meta property="og:image" content="{{ request.scheme }}://{{ request.get_host }}{{ product.main_image.url }}">
-{% endif %}
-
-<meta property="og:type" content="product">
-<meta property="og:url" content="{{ request.build_absolute_uri }}">
-<meta property="og:site_name" content="BeddingShop">
-{% endblock %}
-
 {% block content %}
 <nav aria-label="breadcrumb" class="d-none d-md-block">
     <ol class="breadcrumb">
@@ -36,11 +21,10 @@
         <div class="main-image-container mb-3 border rounded shadow-sm bg-white d-flex align-items-center justify-content-center"
              style="min-height: 300px;">
             {% if product.main_image %}
-            <img id="mainImage" src="{{ product.main_image.url }}" class="img-fluid rounded" alt="{{ product.name }}"
+            <img src="{{ product.main_image.url }}" class="img-fluid rounded" alt="{{ product.name }}"
                  style="max-height: 500px; object-fit: contain;">
             {% else %}
-            <img id="mainImage" src="https://via.placeholder.com/500x500?text=No+Image" class="img-fluid rounded"
-                 alt="No Image">
+            <img src="https://via.placeholder.com/500x500?text=No+Image" class="img-fluid rounded" alt="No Image">
             {% endif %}
         </div>
 
@@ -48,9 +32,10 @@
         <div class="row row-cols-4 g-2">
             {% for img in product.images.all %}
             <div class="col">
-                <div class="border rounded p-1 cursor-pointer h-100 d-flex align-items-center justify-content-center thumbnail-container"
-                     onclick="document.getElementById('mainImage').src = '{{ img.image.url }}'">
-                    <img src="{{ img.image.url }}" class="img-fluid" style="max-height: 80px; cursor: pointer;">
+                <div class="border rounded p-1 cursor-pointer h-100 d-flex align-items-center justify-content-center">
+                    <img src="{{ img.image.url }}" class="img-fluid" alt="Thumbnail"
+                         style="max-height: 80px; cursor: pointer;"
+                         onclick="document.querySelector('.main-image-container img').src = this.src;">
                 </div>
             </div>
             {% endfor %}
@@ -62,75 +47,65 @@
         <h1 class="mb-2 fw-bold">{{ product.name }}</h1>
         <p class="text-muted mb-3">{{ product.category.name }}</p>
 
-        <h2 class="text-danger mb-3">{{ product.price }} грн</h2>
-
-        <div class="mb-4 p-3 bg-light rounded border">
+        <div class="d-flex align-items-center mb-4">
+            <h2 class="text-danger mb-0 me-3">{{ product.price }} грн</h2>
             {% if product.stock > 0 %}
-            <div class="d-flex align-items-center">
-                <i class="bi bi-box-seam me-2 fs-5"></i>
-                <span class="me-2">На складі:</span>
-
-                {% if product.stock > 5 %}
-                <span class="badge bg-success fs-6">{{ product.stock }} шт.</span>
-                {% else %}
-                <span class="badge bg-warning text-dark fs-6">{{ product.stock }} шт. (Закінчується!)</span>
-                {% endif %}
-            </div>
+            <span class="badge bg-success bg-opacity-10 text-success border border-success">В наявності</span>
             {% else %}
-            <span class="text-danger fw-bold"><i class="bi bi-x-circle me-2"></i>Немає в наявності</span>
+            <span class="badge bg-secondary">Немає в наявності</span>
             {% endif %}
         </div>
+
         <div class="mb-4 text-secondary">
             {{ product.description|linebreaks }}
         </div>
 
         {% if product.stock > 0 %}
-        <div class="card bg-white border shadow-sm mb-4">
+        <div class="card bg-light border-0 mb-4">
             <div class="card-body">
-                <form action="{% url 'cart:cart_add' product.id %}" method="post">
+                <form action="{% url 'cart:cart_add' product.id %}" method="post"
+                      class="d-flex flex-column flex-sm-row gap-3">
                     {% csrf_token %}
 
-                    {% if product.variants.all %}
-                    <div class="mb-3">
-                        <label class="form-label fw-bold small">ОБЕРІТЬ ВАРІАНТ:</label>
-                        <select name="variant_id" class="form-select" required>
-                            <option value="" disabled selected>-- Оберіть --</option>
-                            {% for variant in product.variants.all %}
-                            <option value="{{ variant.id }}">{{ variant.name }} ({{ variant.stock }} шт.)</option>
-                            {% endfor %}
-                        </select>
-                    </div>
-                    {% endif %}
-
-                    <div class="d-flex gap-3">
-                        <div class="d-flex align-items-center bg-white border rounded px-2">
-                            <button type="button" class="btn btn-link text-dark p-0"
-                                    onclick="this.nextElementSibling.stepDown()"><i class="bi bi-dash-circle"></i>
-                            </button>
-                            <input name="quantity" type="number" value="1" min="1" max="{{ product.stock }}"
-                                   class="form-control border-0 text-center shadow-none" style="width: 50px;">
-                            <button type="button" class="btn btn-link text-dark p-0"
-                                    onclick="this.previousElementSibling.stepUp()"><i class="bi bi-plus-circle"></i>
-                            </button>
-                        </div>
-                        <button type="submit" class="btn btn-primary flex-grow-1 fw-bold">
-                            <i class="bi bi-cart-plus me-2"></i> Додати в кошик
+                    <div class="d-flex align-items-center justify-content-center bg-white border rounded px-2 py-1"
+                         style="width: fit-content;">
+                        <button type="button" class="btn btn-link text-dark text-decoration-none p-0"
+                                onclick="this.nextElementSibling.stepDown()">
+                            <i class="bi bi-dash-circle"></i>
+                        </button>
+                        <input name="quantity" type="number" value="1" min="1" max="{{ product.stock }}"
+                               class="form-control border-0 text-center shadow-none" style="width: 50px;">
+                        <button type="button" class="btn btn-link text-dark text-decoration-none p-0"
+                                onclick="this.previousElementSibling.stepUp()">
+                            <i class="bi bi-plus-circle"></i>
                         </button>
                     </div>
+
+                    <button type="submit" class="btn btn-primary btn-lg flex-grow-1 w-100">
+                        <i class="bi bi-cart-plus me-2"></i>Додати в кошик
+                    </button>
                 </form>
             </div>
         </div>
         {% endif %}
+
+        {% if product.variants.all %}
+        <div class="mt-4">
+            <h6 class="text-uppercase text-muted small fw-bold mb-3">Характеристики</h6>
+            <ul class="list-group list-group-flush">
+                {% for variant in product.variants.all %}
+                <li class="list-group-item d-flex justify-content-between align-items-center px-0 bg-transparent">
+                    <span>{{ variant.name }}</span>
+                    {% if variant.stock > 0 %}
+                    <small class="text-success">Є на складі</small>
+                    {% else %}
+                    <small class="text-muted">Закінчився</small>
+                    {% endif %}
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+        {% endif %}
     </div>
 </div>
-
-<style>
-    .cursor-pointer {
-        cursor: pointer;
-    }
-
-    .thumbnail-container:hover {
-        border-color: #0d6efd !important;
-    }
-</style>
 {% endblock %}

@@ -6,44 +6,36 @@
 <div class="container d-flex flex-column justify-content-center" style="min-height: 80vh;">
     <div class="row justify-content-center">
         <div class="col-12 col-md-8 col-lg-6 col-xl-5">
-
-            <div class="card shadow-sm border-0 rounded-4">
+            <div class="card shadow border-0 rounded-4 my-4">
                 <div class="card-body p-4 p-sm-5">
-
                     <div class="text-center mb-4">
-                        <h2 class="fw-bold text-dark">Реєстрація</h2>
-                        <p class="text-muted">Створіть акаунт для швидких покупок</p>
+                        <h2 class="fw-bold">Реєстрація</h2>
+                        <p class="text-muted">Створіть акаунт, щоб купувати швидше</p>
                     </div>
 
                     <form method="post" novalidate>
                         {% csrf_token %}
 
-                        {% if form.non_field_errors %}
-                        <div class="alert alert-danger small">
-                            {% for error in form.non_field_errors %}
-                            <div>{{ error }}</div>
-                            {% endfor %}
+                        {% if form.errors %}
+                        <div class="alert alert-danger small py-2">
+                            Будь ласка, перевірте правильність введених даних.
                         </div>
                         {% endif %}
 
                         {% for field in form %}
                         <div class="mb-3">
-                            <label for="{{ field.id_for_label }}" class="form-label fw-semibold text-secondary small">
-                                {{ field.label }}
-                            </label>
-
+                            <label class="form-label fw-semibold small mb-1">{{ field.label }}</label>
                             {{ field }}
 
                             {% if field.help_text %}
-                            <div class="form-text text-muted small" style="font-size: 0.75rem;">
-                                {{ field.help_text }}
+                            <div class="form-text text-muted small" style="font-size: 0.75rem;">{{ field.help_text }}
                             </div>
                             {% endif %}
 
                             {% if field.errors %}
                             <div class="text-danger small mt-1">
                                 {% for error in field.errors %}
-                                <i class="bi bi-exclamation-circle me-1"></i>{{ error }}
+                                <div><i class="bi bi-exclamation-circle me-1"></i>{{ error }}</div>
                                 {% endfor %}
                             </div>
                             {% endif %}
@@ -51,7 +43,7 @@
                         {% endfor %}
 
                         <div class="d-grid gap-2 mt-4">
-                            <button type="submit" class="btn btn-primary btn-lg rounded-pill fw-bold">
+                            <button type="submit" class="btn btn-primary py-2 fw-bold rounded-pill">
                                 Зареєструватися
                             </button>
                         </div>
@@ -59,16 +51,12 @@
 
                     <hr class="my-4 opacity-25">
 
-                    <div class="text-center">
-                        <p class="text-muted mb-0">Вже маєте акаунт?</p>
-                        <a href="{% url 'users:login' %}" class="text-decoration-none fw-bold text-primary fs-6">
-                            Увійти в кабінет
-                        </a>
-                    </div>
-
+                    <p class="text-center mb-0">
+                        Вже маєте акаунт?
+                        <a href="{% url 'users:login' %}" class="fw-bold text-decoration-none">Увійти</a>
+                    </p>
                 </div>
             </div>
-
         </div>
     </div>
 </div>
