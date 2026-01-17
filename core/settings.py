@@ -13,7 +13,7 @@ import os
 from pathlib import Path
 from dotenv import load_dotenv
 
-load_dotenv() # load environment
+load_dotenv()  # load environment
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -28,7 +28,7 @@ SECRET_KEY = 'django-insecure-a(if&9uic12gr_r@ksdij+hqf=%)**e^^xu@5u4)aq@!&xwi0d
 DEBUG = True
 
 # core/settings.py
-ALLOWED_HOSTS = ['*'] # Додайте внутрішні IP вашого ПК# Application definition
+ALLOWED_HOSTS = ['*']  # Додайте внутрішні IP вашого ПК# Application definition
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -84,10 +84,10 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'bedding_shop_db',  # Назва бази, яку ви створили
-        'USER': 'root',             # Ваш логін (зазвичай root)
-        'PASSWORD': os.getenv('DATABASE_PASSWORD'),             # Ваш пароль (у XAMPP часто порожній)
-        'HOST': '127.0.0.1',        # Локальний хост
-        'PORT': '3306',             # Стандартний порт
+        'USER': 'root',  # Ваш логін (зазвичай root)
+        'PASSWORD': os.getenv('DATABASE_PASSWORD'),  # Ваш пароль (у XAMPP часто порожній)
+        'HOST': '127.0.0.1',  # Локальний хост
+        'PORT': '3306',  # Стандартний порт
         'OPTIONS': {
             # Важливо для строгого режиму SQL
             'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
@@ -161,4 +161,5 @@ LOGIN_URL = '/users/login/'
 # --- НАЛАШТУВАННЯ ТЕЛЕГРАМ ---
 TELEGRAM_BOT_TOKEN = os.getenv('TELEGRAM_BOT_TOKEN')
 TELEGRAM_MANAGER_CHAT_ID = os.getenv('TELEGRAM_MANAGER_CHAT_ID')
-# -----------------------------
+TELEGRAM_CHANEL_BOT = '8558954683:AAHdf75VRDgyb807502XBA79J51lnKlnaBw'
+TELEGRAM_CHANNEL_ID = '-1003603057560'  # 👈 Мінус має бути всередині лапок!# -----------------------------
