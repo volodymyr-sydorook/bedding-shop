@@ -3,18 +3,21 @@
 {% block title %}{{ product.name }}{% endblock %}
 
 {% block meta_tags %}
-<meta property="og:title" content="{{ product.name }} | BeddingShop">
+    <meta property="og:title" content="{{ product.name }} | BeddingShop">
+    
+    <meta property="og:description" content="🔥 Ціна: {{ product.price }} грн. {{ product.description|striptags|truncatewords:20 }}">
+    
+    {% if product.main_image %}
+    <meta property="og:image" content="{{ request.scheme }}://{{ request.get_host }}{{ product.main_image.url }}">
+    {% endif %}
 
-<meta property="og:description"
-      content="🔥 Ціна: {{ product.price }} грн. {{ product.description|striptags|truncatechars:100 }}">
+    {% for image in product.images.all|slice:":3" %}
+        <meta property="og:image" content="{{ request.scheme }}://{{ request.get_host }}{{ image.image.url }}">
+    {% endfor %}
 
-{% if product.main_image %}
-<meta property="og:image" content="{{ request.scheme }}://{{ request.get_host }}{{ product.main_image.url }}">
-{% endif %}
-
-<meta property="og:type" content="product">
-<meta property="og:url" content="{{ request.build_absolute_uri }}">
-<meta property="og:site_name" content="BeddingShop">
+    <meta property="og:url" content="{{ request.build_absolute_uri }}">
+    <meta property="og:type" content="product">
+    <meta property="og:site_name" content="BeddingShop">
 {% endblock %}
 
 {% block content %}
