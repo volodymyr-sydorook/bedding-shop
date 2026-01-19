@@ -84,8 +84,8 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'bedding_shop_db',  # Назва бази, яку ви створили
-        'USER': 'root',  # Ваш логін (зазвичай root)
-        'PASSWORD': os.getenv('DATABASE_PASSWORD'),  # Ваш пароль (у XAMPP часто порожній)
+        'USER': 'bedding_user',  # Ваш логін (зазвичай root)
+        'PASSWORD': 'Soroka292004@',  # Ваш пароль (у XAMPP часто порожній)
         'HOST': '127.0.0.1',  # Локальний хост
         'PORT': '3306',  # Стандартний порт
         'OPTIONS': {
