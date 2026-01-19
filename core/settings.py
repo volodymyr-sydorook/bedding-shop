@@ -25,10 +25,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-a(if&9uic12gr_r@ksdij+hqf=%)**e^^xu@5u4)aq@!&xwi0d'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 # core/settings.py
-ALLOWED_HOSTS = ['*']  # Додайте внутрішні IP вашого ПК# Application definition
+ALLOWED_HOSTS = ['beddingshop.shop', 'www.beddingshop.shop', '173.242.51.228']  # Додайте внутрішні IP вашого ПК# Application definition
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -141,12 +141,14 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 # (Ми їх ще не використовували, але одразу налаштуємо)
 
 # URL-адреса для статичних файлів
-STATIC_URL = '/static/'
+STATIC_URL = 'static/'
+
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 # Папка, де Django буде шукати наші власні CSS/JS файли
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'static'),
-]
+#STATICFILES_DIRS = [
+#    os.path.join(BASE_DIR, 'static'),
+#]
 
 CART_SESSION_ID = 'cart'
 
