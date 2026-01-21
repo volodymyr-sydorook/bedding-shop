@@ -25,9 +25,9 @@ def share_to_telegram_user(modeladmin, request, queryset):
 
     # 2. Формуємо красивий текст
     text = (
-        f"*{product.name}*\n\n"  # Жирний шрифт у Markdown
-        f"{strip_tags(product.description)[:200]}...\n\n"
-        f"💰 *Ціна: {product.price} грн*\n"
+        f"{product.name}\n\n"  # Жирний шрифт у Markdown
+        f"{strip_tags(product.description)[:300]}...\n\n"
+        f"💰 Ціна: {product.price} грн\n"
     )
 
     # 3. Кодуємо текст для URL
@@ -58,8 +58,11 @@ def share_to_viber(modeladmin, request, queryset):
 
     # Формуємо текст
     product_url = f"https://beddingshop.shop/product/{product.slug}/"
-    text = f"{product.name}\n🔥 Ціна: {product.price} грн\n\nЗамовити тут: {product_url}"
-
+    text = (
+        f"{product.name}\n\n"  # Жирний шрифт у Markdown
+        f"{strip_tags(product.description)[:300]}...\n\n"
+        f"💰 Ціна: {product.price} грн\n"
+    )
     encoded_text = quote(text)
 
     # Створюємо посилання
