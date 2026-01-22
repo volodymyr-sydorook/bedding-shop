@@ -136,6 +136,7 @@ AUTH_USER_MODEL = 'users.User'
 # Абсолютний шлях до папки, де Django буде зберігати завантажені файли.
 # os.path.join(BASE_DIR, 'media') - створює папку 'media' в корені проєкту.
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_URL = '/media/'
 
 # --- Налаштування статичних файлів (CSS, JS) ---
 # (Ми їх ще не використовували, але одразу налаштуємо)
